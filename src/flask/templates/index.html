@@ -27,10 +27,25 @@
             })
             })
 
-            //search students
-           
-            
-            
+             //load result students
+             $("#select_btn").click(() =>{
+                $.ajax({
+                    url:"/list-rest-result",
+                    cache: false
+                }).done(data =>{
+                    students=JSON.parse(data)
+                    let tBodyHtml=''
+                    for(let row of students){
+                        tBodyHtml +=`<tr>
+                        <td>${row['name']}</td>
+                        <td>${row['phone']}</td>
+                        </tr>
+                        `
+                    }
+                    $("#searching-table tbody").html(tBodyHtml)
+                })
+            })
+        
 
             //load students
             $("#load-students").click(() =>{
@@ -74,9 +89,9 @@
     </form>
 
     <h3>학생 검색 및 삭제</h3>
-    <form>
-        <input type="text" name="search" placeholder="Name or phone">
-        <button type="submit" id="search">검색하기</button>
+    <form action="{{url_for('select')}}">
+        <input type="text" name="name_to_search" placeholder="Name">
+        <button type="hidden" value="{{name}}" id="select_btn">검색하기</button>
     </form>
 
     <form action="{{url_for('delete')}}" method="POST">
@@ -84,6 +99,13 @@
         <button type="hidden" value="{{name}}" id="delete_btn">삭제하기</button>
     </form>
 
+    <form action="{{url_for('update')}}" method="POST">
+        <input type="text" name="name_to_update" placeholder="Name to update">
+        <input type="text" name="phone_to_update" placeholder="New number">
+        <button type="hidden" value="{{name}}, {{phone}}" id="update_btn">수정하기</button>
+    </form>
+
+    <h3>검색 결과</h3>
     <table id="searching-table">
         <thead>
             <tr>

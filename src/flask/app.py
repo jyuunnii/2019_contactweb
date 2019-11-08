@@ -19,6 +19,21 @@ def register():
 
     return redirect("/")
 
+# @app.route('/select', methods=["GET"])
+# def select():
+#   name = request.form["name_to_search"]
+#   phone = request.form["phone_to_search"]
+
+#   result = helper.select("student", name, phone)
+
+#   print(f"{name},{phone} 검색")
+#   print(helper.select("student", name, phone))
+#   print(json.dumps(result))
+
+#   return result
+
+
+
 @app.route('/delete', methods=["POST"])
 def delete():
     name = request.form["name_to_delete"]
@@ -26,8 +41,16 @@ def delete():
     print(f"{name} 삭제")
     print(helper.delete("student", name))
 
-    return render_template("index.html")
+    return redirect("/")
 
+@app.route('/update', methods=["POST"])
+def update():
+    name = request.form["name_to_update"]
+    phone = request.form["phone_to_update"]
+
+    print(f"{name}, {phone} 수정")
+    print(helper.update("student", name, phone))
+    return redirect("/")
 
 # @app.route("/register-rest", methods=["POST"]
 # def register_rest():
@@ -38,7 +61,6 @@ def delete():
 
 #     return "OK"
 
-
 @app.route("/list")
 def students_list():
   #TODO: GET student data from 'student' table
@@ -48,10 +70,19 @@ def students_list():
 
 @app.route("/list-rest")
 def students_list_rest():
-  #TODO: GET student data from 'student' table
   result = helper.students_list() #list type -> column 으로 접근
   result = json.dumps(result)
   return result
+
+@app.route('/select', methods=["GET"])
+def select():
+  name = request.form["name_to_search"]
+  print(f"{name} 검색")
+  print(helper.select("student", name))
+  result = helper.select("student", name) #list type -> column 으로 접근
+  result = json.dumps(result)
+  return result
+
 
 if __name__ == ("__main__"):
   # docker
