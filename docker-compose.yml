@@ -7,7 +7,7 @@ services:
       - pgdata:/var/lib/postgresql/data
     ports:
       - "54321:5432"
-    environment:
+    environment: 
       - POSTGRES_DB=dbapp
       - POSTGRES_USER=dbuser
       - POSTGRES_PASSWORD=1234

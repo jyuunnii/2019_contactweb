@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Students</title>
+    <script
+    src="https://code.jquery.com/jquery-3.4.1.js"
+    integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+    crossorigin="anonymous"></script>
+    
+    <script>
+        $(document).ready(() => {
+            //insert students
+            $("#register").submit((e)=>{
+                e.preventDefault()
+                let formData= new FormData($("form")[0])
+                $.ajax({
+                type: "POST",
+                url: "/register",
+                cache: false,
+                data:formData,
+                processData: false,
+                contentType:false,
+                success: res => {
+                    console.log(res)
+                }
+            })
+            })
+
+            //search students
+           
+            
+            //delete students
+
+
+            //load students
+            $("#load-students").click(() =>{
+                //alert("학생 불러오기")
+                $.ajax({
+                    url:"list-rest",
+                    cache: false
+                }).done(data =>{
+                    students=JSON.parse(data)
+                    let tBodyHtml=''
+                    for(let row of students){
+                        tBodyHtml +=`<tr>
+                        <td>${row['name']}</td>
+                        <td>${row['phone']}</td>
+                        </tr>
+                        `
+                    }
+                    $("#students-table tbody").html(tBodyHtml)
+                })
+            })
+        })
+    </script>
+</head>
+<body>
+    This is web for searching contact info.
+    <br/>
+    <h3>학생 등록</h3>
+    <form method="POST" id="register">
+        <input type="text" name="name" placeholder="Your Name"/>
+        <input type="text" name="phone" placeholder="Your Phone number"/>
+        <button type="submit">등록하기</button>
+    </form>
+    <h3>학생 검색</h3>
+    <form>
+        <input type="text" name="search" placeholder="Name or phone">
+        <button type="submit" id="search">검색하기</button>
+        <button type="submit" id="delete">삭제하기</button>
+    </form>
+    <table id="searching-table">
+        <thead>
+            <tr>
+            <th>Name</th>
+            <th>Phone</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <br/>
+    <h3>학생 전체  명단</h3>
+    <button id="load-students">학생 불러오기</button>
+    <table id="students-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Phone</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</body>
+</html>
