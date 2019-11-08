@@ -74,6 +74,25 @@ def insert(table_name, name, phone):
     
     return 0
 
+def delete(table_name, name):
+    sql = f'''DELETE FROM {table_name} WHERE name='{name}';
+    '''
+    print(sql)
+    try:
+        conn = pg.connect(connect_string) #db 연결(로그인)
+        cur = conn.cursor() #db 작업할 지시자 설정
+        cur.execute(sql) #sql문 실행
+
+        #db 저장 및 종료
+        conn.commit()
+        conn.close()
+    except pg.OperationalError as e:
+        print(e)
+        return -1
+    
+    return 0
+
+
 def students_list():
     sql = f"""SELECT name, phone FROM student
     """

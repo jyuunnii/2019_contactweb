@@ -30,12 +30,10 @@
             //search students
            
             
-            //delete students
-
+            
 
             //load students
             $("#load-students").click(() =>{
-                //alert("학생 불러오기")
                 $.ajax({
                     url:"list-rest",
                     cache: false
@@ -52,6 +50,16 @@
                     $("#students-table tbody").html(tBodyHtml)
                 })
             })
+
+            //delete button alert
+            $("#delete_btn").click(() => {
+                alert("삭제되었습니다");
+            })
+
+            //register button alert
+            $("#register_btn").click(() => {
+                alert("등록되었습니다");
+            })
         })
     </script>
 </head>
@@ -62,14 +70,20 @@
     <form method="POST" id="register">
         <input type="text" name="name" placeholder="Your Name"/>
         <input type="text" name="phone" placeholder="Your Phone number"/>
-        <button type="submit">등록하기</button>
+        <button type="submit" id="register_btn">등록하기</button>
     </form>
-    <h3>학생 검색</h3>
+
+    <h3>학생 검색 및 삭제</h3>
     <form>
         <input type="text" name="search" placeholder="Name or phone">
         <button type="submit" id="search">검색하기</button>
-        <button type="submit" id="delete">삭제하기</button>
     </form>
+
+    <form action="{{url_for('delete')}}" method="POST">
+        <input type="text" name="name_to_delete" placeholder="Name to delete">
+        <button type="hidden" value="{{name}}" id="delete_btn">삭제하기</button>
+    </form>
+
     <table id="searching-table">
         <thead>
             <tr>
@@ -81,8 +95,8 @@
     </table>
 
     <br/>
-    <h3>학생 전체  명단</h3>
-    <button id="load-students">학생 불러오기</button>
+    <h3>학생 전체 명단</h3>
+    <button id="load-students">전체 불러오기</button>
     <table id="students-table">
         <thead>
             <tr>

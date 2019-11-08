@@ -7,9 +7,6 @@ app = Flask(__name__)
 @app.route('/')
 def index():
   tables = helper.read_tables()
-  #print(type(tables), tables)
-  #print(type(tables[0]), tables[0])
-  #print(type(tables[0][0]), tables[0][0])
   return render_template("index.html", table=[0][0])
 
 @app.route('/register', methods=["POST"])
@@ -17,19 +14,29 @@ def register():
     name = request.form.get("name")
     phone = request.form.get("phone")
 
-    print(f"{name}이 {phone}로 가입함.")
+    print(f"{name}이 {phone}로 가입")
     print(helper.insert("student", name, phone))
 
     return redirect("/")
 
-@app.route("/register-rest", methods=["POST"])
-def register_rest():
-    name = request.form.get("name")
-    phone = request.form.get("phone")
-    print(f"{name}이 {phone}로 가입함.")
-    print(helper.insert("student", name, phone))
+@app.route('/delete', methods=["POST"])
+def delete():
+    name = request.form["name_to_delete"]
 
-    return "OK"
+    print(f"{name} 삭제")
+    print(helper.delete("student", name))
+
+    return render_template("index.html")
+
+
+# @app.route("/register-rest", methods=["POST"]
+# def register_rest():
+#     name = request.form.get("name")
+#     phone = request.form.get("phone")
+#     print(f"{name}이 {phone}로 가입함.")
+#     print(helper.insert("student", name, phone))
+
+#     return "OK"
 
 
 @app.route("/list")
