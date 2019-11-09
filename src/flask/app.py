@@ -1,6 +1,7 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, url_for
 from pypg import helper
 import json
+
 
 app = Flask(__name__)
 
@@ -17,21 +18,19 @@ def register():
     print(f"{name}이 {phone}로 가입")
     print(helper.insert("student", name, phone))
 
-    return redirect("/")
+    return render_template("index.html")
 
-# @app.route('/select', methods=["GET"])
-# def select():
-#   name = request.form["name_to_search"]
-#   phone = request.form["phone_to_search"]
+@app.route('/select', methods=["POST"])
+def select():
+  name = request.form.get('name_to_search')
+  
+  print(f"{name} 검색")
+  print(helper.select("student", name))
 
-#   result = helper.select("student", name, phone)
-
-#   print(f"{name},{phone} 검색")
-#   print(helper.select("student", name, phone))
-#   print(json.dumps(result))
-
-#   return result
-
+  result = helper.select("student", name)
+  result = json.dumps(result)
+  
+  return result
 
 
 @app.route('/delete', methods=["POST"])
@@ -52,34 +51,17 @@ def update():
     print(helper.update("student", name, phone))
     return redirect("/")
 
-# @app.route("/register-rest", methods=["POST"]
-# def register_rest():
-#     name = request.form.get("name")
-#     phone = request.form.get("phone")
-#     print(f"{name}이 {phone}로 가입함.")
-#     print(helper.insert("student", name, phone))
 
-#     return "OK"
-
-@app.route("/list")
-def students_list():
-  #TODO: GET student data from 'student' table
-  result = helper.students_list() #list type -> column 으로 접근
+# @app.route("/list")
+# def students_list():
+#   #TODO: GET student data from 'student' table
+#   result = helper.students_list() #list type -> column 으로 접근
  
-  return render_template("list.html", students=result) #list.html 의 students
+#   return render_template("list.html", students=result) #list.html 의 students
 
 @app.route("/list-rest")
 def students_list_rest():
   result = helper.students_list() #list type -> column 으로 접근
-  result = json.dumps(result)
-  return result
-
-@app.route('/select', methods=["GET"])
-def select():
-  name = request.form["name_to_search"]
-  print(f"{name} 검색")
-  print(helper.select("student", name))
-  result = helper.select("student", name) #list type -> column 으로 접근
   result = json.dumps(result)
   return result
 
@@ -89,3 +71,6 @@ if __name__ == ("__main__"):
   app.run(debug=True, host='0.0.0.0', port=5090)
   # other
   #app.run(debug=True)
+
+
+

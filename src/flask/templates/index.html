@@ -30,9 +30,11 @@
              //load result students
              $("#select_btn").click(() =>{
                 $.ajax({
-                    url:"/list-rest-result",
-                    cache: false
+                    url:"select",
+                    cache: false,
+                    dataType:JSON
                 }).done(data =>{
+                    console.log("success")
                     students=JSON.parse(data)
                     let tBodyHtml=''
                     for(let row of students){
@@ -66,6 +68,12 @@
                 })
             })
 
+           //delete button alert
+           $("#delete_btn").submit(() => {
+                alert("동일한 연락처 정보가 있습니다");
+            })
+
+
             //delete button alert
             $("#delete_btn").click(() => {
                 alert("삭제되었습니다");
@@ -89,10 +97,11 @@
     </form>
 
     <h3>학생 검색 및 삭제</h3>
-    <form action="{{url_for('select')}}">
+    <form action="{{url_for('select')}}" method="POST" >
         <input type="text" name="name_to_search" placeholder="Name">
-        <button type="hidden" value="{{name}}" id="select_btn">검색하기</button>
+        <button  id="select_btn">검색하기</button>
     </form>
+   
 
     <form action="{{url_for('delete')}}" method="POST">
         <input type="text" name="name_to_delete" placeholder="Name to delete">

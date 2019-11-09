@@ -75,22 +75,21 @@ def insert(table_name, name, phone):
     return 0
 
 def select(table_name, name):
-    sql = f'''SELECT * FROM {table_name} WHERE name='{name}';
+    sql = f'''SELECT name, phone FROM {table_name} WHERE name='{name}';
     '''
-    print(sql)
     try:
-        conn = pg.connect(connect_string) #db 연결(로그인)
-        cur = conn.cursor() #db 작업할 지시자 설정
-        cur.execute(sql) #sql문 실행
-
-        #db 저장 및 종료
-        conn.commit()
+        conn=pg.connect(connect_string) #db connect
+        #cur=conn.cursor()  -> {{row[0]}}
+        cur=conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        cur.execute(sql)
+        result=cur.fetchall()  #data 하나씩 순회
+        #for row in result:
+            #print(row)
         conn.close()
-    except pg.OperationalError as e:
+        return result
+    except Exception as e:
         print(e)
-        return -1
-    
-    return 0
+        return[]
 
 
 def delete(table_name, name):
