@@ -9,24 +9,7 @@
     crossorigin="anonymous"></script>
     <script>
         $(document).ready(() => {
-            //insert students
-            $("#register").submit((e)=>{
-            e.preventDefault()
-            let formData= new FormData($("form")[0])
-            $.ajax({
-            type: "POST",
-            url: "/register",
-            cache: false,
-            data:formData,
-            processData: false,
-            contentType:false,
-            success: res => {
-                console.log(res)
-            }
-        })
-    })
-    
-    //load students
+            //학생 전체 명단
             $("#load-students").click(() =>{
                 $.ajax({
                     url:"list-rest",
@@ -44,34 +27,49 @@
                     $("#students-table tbody").html(tBodyHtml)
                 })
             })
+
+            //등록하기
+            $("#register").submit((e)=>{
+            e.preventDefault()
+            let formData= new FormData($("form")[0])
+            $.ajax({
+            type: "POST",
+            url: "/register",
+            cache: false,
+            data:formData,
+            processData: false,
+            contentType:false,
+            success: res => {
+                console.log(res)
+            }
+        })
+    })
     
-        
-            $("#search").submit((e) =>{   
+            //검색하기
+            $("#select_btn").submit((e) =>{  
                 e.preventDefault()
                 $.ajax({
                     url:"/select",
                     cache: false
-                }).done(data =>{
-                    students=JSON.parse(data)
-                    let tBodyHtml=''
-                    for(let row of students){
-                        tBodyHtml +=`<tr>
-                        <td>${row['name']}</td>
-                        <td>${row['phone']}</td>
-                        </tr>
-                        `
-                    }
-                    $("#searching-table tbody").html(tBodyHtml)
+                })
+            })
+
+            //인원 확인하기
+            ("#total_btn").submit((e) =>{  
+                e.preventDefault()
+                $.ajax({
+                    url:"/count",
+                    cache: false
                 })
             })
         
             
-            //delete button alert
+            //삭제 알람
             $("#delete_btn").click(() => {
                 alert("삭제되었습니다");
             })
             
-            //register button alert
+            //등록 알람
             $("#register_btn").click(() => {
                 alert("등록되었습니다");
             })
@@ -80,6 +78,7 @@
 </head>
 <body>
     This is web for searching contact information.
+</br>
     Search your name!
     <br/>
     <h3>학생 등록</h3>
@@ -90,12 +89,15 @@
     </form>
 
     <h3>학생 검색 및 삭제</h3>
-    <form id="search" method="GET">
+    <form action="{{url_for('select')}}" id="search" method="POST" target="param">
         <input type="text" name="name_to_search" placeholder="Name to search">
-        <button id="select_btn">검색하기</button>
+        <button  id="select_btn">검색하기</button>
     </form>
-    
 
+    <form action="{{url_for('count')}}" id="search" method="POST" target="cnt_param">
+        <input type="text" name="name_to_count" placeholder="Name to count">
+        <button  id="total_btn">인원 확인하기</button>
+    </form>
 
     <form action="{{url_for('delete')}}" method="POST">
         <input type="text" name="name_to_delete" placeholder="Name to delete">
@@ -107,19 +109,11 @@
         <input type="text" name="phone_to_update" placeholder="New number">
         <button type="hidden" value="{{name}}, {{phone}}" id="update_btn">수정하기</button>
     </form>
-
+</br>
     <h3>검색 결과</h3>
-    <table id="searching-table">
-        <thead>
-            <tr>
-            <th>Name</th>
-            <th>Phone</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
-
-    <br/>
+    <iframe name="param" frameborder="10" height="100"></iframe>
+    <iframe name="cnt_param" frameborder="10" height="100"></iframe>
+<br/>
     <h3>학생 전체 명단</h3>
     <button id="load-students">전체 불러오기</button>
     <table id="students-table">

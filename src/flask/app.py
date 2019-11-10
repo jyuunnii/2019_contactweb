@@ -10,6 +10,7 @@ def index():
   tables = helper.read_tables()
   return render_template("index.html", table=[0][0])
 
+
 @app.route('/register', methods=["POST"])
 def register():
     name = request.form.get("name")
@@ -20,17 +21,28 @@ def register():
 
     return render_template("index.html")
 
-@app.route('/select')
+
+@app.route('/select', methods=["POST"])
 def select():
-  #name = request.form['name_to_search'] #input 값 갖고오기
-  name="고태형"
-  result = helper.selecting("student", name)
+  name = request.form["name_to_search"]
+  result = helper.select("student", name)
+  
   print(f"{name} 검색결과 : {result}")
 
-  result = json.dumps(result)
-  print(f"{result}")
+  result = json.dumps(result, ensure_ascii=False)
+ 
   return result
 
+
+@app.route('/count', methods=["POST"])
+def count():
+  name = request.form["name_to_count"]
+  result = helper.count("student", name)
+  result=json.dumps(result)
+
+  print(f"{name}과 검색결과가 유사한 총 개수: {result}")
+  
+  return result
 
 
 @app.route('/delete', methods=["POST"])
@@ -38,18 +50,20 @@ def delete():
     name = request.form["name_to_delete"]
 
     print(f"{name} 삭제")
-    print(helper.delete("student", name))
+    print(helper.delete("student",name))
 
-    return redirect("/")
+    return render_template("index.html")
+
 
 @app.route('/update', methods=["POST"])
 def update():
-    name = request.form["name_to_update"]
-    phone = request.form["phone_to_update"]
+  name = request.form["name_to_update"]
+  phone = request.form["phone_to_update"]
 
-    print(f"{name}, {phone} 수정")
-    print(helper.update("student", name, phone))
-    return redirect("/")
+  print(f"{name}, {phone} 수정")
+  print(helper.update("student", name, phone))
+
+  return render_template("index.html")
 
 
 @app.route("/list-rest")

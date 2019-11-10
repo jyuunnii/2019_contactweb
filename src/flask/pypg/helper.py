@@ -50,6 +50,7 @@ def create_table(table_name):
     except pg.OperationalError as e:
         print(e)
 
+
 def insert(table_name, name, phone):
     sql = f'''INSERT INTO {table_name} 
         VALUES('{name}', '{phone}');
@@ -68,8 +69,9 @@ def insert(table_name, name, phone):
     
     return 0
 
-def selecting(table_name, name):
-    sql = f'''SELECT name, phone FROM {table_name} WHERE name='{name}';
+
+def select(table_name, name):
+    sql = f'''SELECT name, phone FROM {table_name} WHERE name LIKE '%{name}%';
     '''
     print(sql)
     try:
@@ -83,7 +85,23 @@ def selecting(table_name, name):
     except Exception as e:
         print(e)
         return[]
-    
+
+
+def count(table_name, name):
+    sql = f'''SELECT COUNT(*) FROM {table_name} WHERE name LIKE '%{name}%';
+    '''
+    print(sql)
+    try:
+        conn=pg.connect(connect_string) 
+        cur=conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        cur.execute(sql)
+        result=cur.fetchall()  
+       
+        conn.close()
+        return result
+    except Exception as e:
+        print(e)
+        return[]
 
 
 def delete(table_name, name):
@@ -103,6 +121,7 @@ def delete(table_name, name):
     
     return 0
 
+
 def update(table_name, name, phone):
     sql = f'''UPDATE {table_name} SET phone='{phone}' WHERE name='{name}';
     '''
@@ -119,6 +138,7 @@ def update(table_name, name, phone):
         return -1
     
     return 0
+
 
 def students_list():
     sql = f'''SELECT name, phone FROM student
