@@ -20,17 +20,17 @@ def register():
 
     return render_template("index.html")
 
-@app.route('/select', methods=["POST"])
+@app.route('/select', methods=["GET"])
 def select():
-  name = request.form.get('name_to_search')
-  
+  data=[]
+    #name = request.form.get('name_to_search') #input 값 갖고오기
+  name="고태형"
+  data = helper.selecting("student", name)
+  data = data[0]
   print(f"{name} 검색")
-  print(helper.select("student", name))
+  print(f"{data} 검색결과")
 
-  result = helper.select("student", name)
-  result = json.dumps(result)
-  
-  return result
+  return redirect(url_for("students_list_result", data=data))
 
 
 @app.route('/delete', methods=["POST"])
@@ -63,6 +63,13 @@ def update():
 def students_list_rest():
   result = helper.students_list() #list type -> column 으로 접근
   result = json.dumps(result)
+  return result
+
+@app.route("/list-result")
+def students_list_result():
+  data = request.args["data"]
+  print(f"{data}")
+  result = json.dumps(data)
   return result
 
 
