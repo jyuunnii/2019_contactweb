@@ -22,13 +22,12 @@ def register():
 
 @app.route('/select', methods=["GET"])
 def select():
-  data=[]
     #name = request.form.get('name_to_search') #input 값 갖고오기
   name="고태형"
-  data = helper.selecting("student", name)
-  print(f"{name} 검색결과 : {data}")
+  result = helper.selecting("student", name)
+  print(f"{name} 검색결과 : {result}")
 
-  result = json.dumps(data, ensure_ascii=False)
+  result = json.dumps(result)
   print(f"{result}")
   return result
 
@@ -57,6 +56,7 @@ def update():
 def students_list_rest():
   result = helper.students_list() #list type -> column 으로 접근
   result = json.dumps(result)
+  print(f"{result}")
   return result
 
 
