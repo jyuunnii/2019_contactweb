@@ -20,9 +20,9 @@ def register():
 
     return render_template("index.html")
 
-@app.route('/select', methods=["GET"])
+@app.route('/select')
 def select():
-    #name = request.form.get('name_to_search') #input 값 갖고오기
+  #name = request.form['name_to_search'] #input 값 갖고오기
   name="고태형"
   result = helper.selecting("student", name)
   print(f"{name} 검색결과 : {result}")
