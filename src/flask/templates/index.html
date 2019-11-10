@@ -46,15 +46,14 @@
             })
 
             $("#select_btn").click(() =>{
-                let name = document.getElementById("name_to_search").value;
+                //let name = document.getElementById("name_to_search").value;
                 
                 $.ajax({
                     url:"/select",
                     cache: false
+                    
                 }).done(data =>{
-                    console.log(data)
                     students=JSON.parse(data)
-                    console.log(students)
                     let tBodyHtml=''
                     for(let row of students){
                         tBodyHtml +=`<tr>

@@ -26,11 +26,12 @@ def select():
     #name = request.form.get('name_to_search') #input 값 갖고오기
   name="고태형"
   data = helper.selecting("student", name)
-  data = data[0]
-  print(f"{name} 검색")
-  print(f"{data} 검색결과")
+  print(f"{name} 검색결과 : {data}")
 
-  return redirect(url_for("students_list_result", data=data))
+  result = json.dumps(data, ensure_ascii=False)
+  print(f"{result}")
+  return result
+
 
 
 @app.route('/delete', methods=["POST"])
@@ -52,24 +53,10 @@ def update():
     return redirect("/")
 
 
-# @app.route("/list")
-# def students_list():
-#   #TODO: GET student data from 'student' table
-#   result = helper.students_list() #list type -> column 으로 접근
- 
-#   return render_template("list.html", students=result) #list.html 의 students
-
 @app.route("/list-rest")
 def students_list_rest():
   result = helper.students_list() #list type -> column 으로 접근
   result = json.dumps(result)
-  return result
-
-@app.route("/list-result")
-def students_list_result():
-  data = request.args["data"]
-  print(f"{data}")
-  result = json.dumps(data)
   return result
 
 
